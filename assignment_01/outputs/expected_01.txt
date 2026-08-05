@@ -1,0 +1,12 @@
+Algorithm: GEMM Simple
+Result matrix:
+20 38 25 51
+129 90 135 162
+64 55 62 84
+22 37 29 39
+Algorithm: GEMM Blocking
+Result matrix:
+20 38 25 51
+129 90 135 162
+64 55 62 84
+22 37 29 39
