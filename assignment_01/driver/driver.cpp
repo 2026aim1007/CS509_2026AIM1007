@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <vector>
 #include "../src/gemm.h"
 
 using namespace std;
@@ -28,74 +29,86 @@ void printMatrix(const Matrix& C, ostream& out) {
 }
 
 int main() {
-    string testFilePath = "../tests/test_01.txt";
-    string outFilePath = "../outputs/output_01.txt";
-    string expectedFilePath = "../outputs/expected_01.txt";
+    cout << "=================================================\n";
+    cout << "          Assignment 1 GEMM Automated Testing           \n";
+    cout << "=================================================\n\n";
 
-    ifstream file(testFilePath);
-    if (!file.is_open()) {
-        cout << "Error: Could not open test file " << testFilePath << "\n";
-        return 1;
-    }
+    for (int i = 1; i <= 5; i++) {
+        string testId = "0" + to_string(i);
+        string testFilePath = "tests/test_" + testId + ".txt";
+        string outFilePath = "outputs/output_" + testId + ".txt";
+        string expectedFilePath = "outputs/expected_" + testId + ".txt";
 
-    int M, K, N;
-    if (!(file >> M >> K >> N)) {
-        cout << "Error: Invalid file format.\n";
-        return 1;
-    }
+        cout << ">>> Running Test Case " << i << " (" << testFilePath << ")\n";
 
-    Matrix A;
-    A.rows = M; A.cols = K; A.data.assign(M, vector<int>(K));
-    for (int i = 0; i < M; i++) {
-        for (int k = 0; k < K; k++) file >> A.data[i][k];
-    }
+        ifstream file(testFilePath);
+        if (!file.is_open()) {
+            cout << "  [!] Error: Could not open test file " << testFilePath << "\n\n";
+            continue;
+        }
 
-    Matrix B;
-    B.rows = K; B.cols = N; B.data.assign(K, vector<int>(N));
-    for (int k = 0; k < K; k++) {
-        for (int n = 0; n < N; n++) file >> B.data[k][n];
-    }
-    
-    file.close();
-    ofstream outFile(outFilePath);
-    if (!outFile.is_open()) {
-        cout << "Error: Could not create output file. Does the 'outputs' folder exist?\n";
-        return 1;
-    }
+        int M, K, N;
+        if (!(file >> M >> K >> N)) {
+            cout << "  [!] Error: Invalid file format.\n\n";
+            continue;
+        }
 
-    // --- Simple Matrix Multiplication ---
-    auto start_simple = high_resolution_clock::now();
-    Matrix C_simple = gemm_simple(A, B);
-    auto stop_simple = high_resolution_clock::now();
-    auto duration_simple = duration_cast<milliseconds>(stop_simple - start_simple);
-    
-    cout << "Algorithm: GEMM Simple\nResult matrix:\n";
-    outFile << "Algorithm: GEMM Simple\nResult matrix:\n";
-    
-    printMatrix(C_simple, cout);
-    printMatrix(C_simple, outFile);
-    cout << "Execution time: " << duration_simple.count() << " ms\n\n";
+        Matrix A;
+        A.rows = M; A.cols = K; A.data.assign(M, vector<int>(K));
+        for (int row = 0; row < M; row++) {
+            for (int col = 0; col < K; col++) file >> A.data[row][col];
+        }
 
-    int blockSize = 2;
-    auto start_blocking = high_resolution_clock::now();
-    Matrix C_blocking = gemm_blocking(A, B, blockSize);
-    auto stop_blocking = high_resolution_clock::now();
-    auto duration_blocking = duration_cast<milliseconds>(stop_blocking - start_blocking);
-    
-    cout << "Algorithm: GEMM Blocking\nResult matrix:\n";
-    outFile << "Algorithm: GEMM Blocking\nResult matrix:\n";
-    
-    printMatrix(C_blocking, cout);
-    printMatrix(C_blocking, outFile);
-    
-    cout << "Execution time: " << duration_blocking.count() << " ms\n\n";
+        Matrix B;
+        B.rows = K; B.cols = N; B.data.assign(K, vector<int>(N));
+        for (int row = 0; row < K; row++) {
+            for (int col = 0; col < N; col++) file >> B.data[row][col];
+        }
+        
+        file.close();
+        
+        ofstream outFile(outFilePath);
+        if (!outFile.is_open()) {
+            cout << "  [!] Error: Could not create output file.\n\n";
+            continue;
+        }
 
-    outFile.close();
+        // Simple Matrix Multiplication
+        auto start_simple = high_resolution_clock::now();
+        Matrix C_simple = gemm_simple(A, B);
+        auto stop_simple = high_resolution_clock::now();
+        auto duration_simple = duration_cast<milliseconds>(stop_simple - start_simple);
+        
+        cout << "Algorithm: GEMM Simple\nResult matrix:\n";
+        outFile << "Algorithm: GEMM Simple\nResult matrix:\n";
+        
+        printMatrix(C_simple, outFile);
+        cout << "Execution time: " << duration_simple.count() << " ms\n\n";
 
-    if (compareFiles(outFilePath, expectedFilePath)) {
-        cout << "--- TEST CASE HAS PASSED ---\n";
-    } else {
-        cout << "--- TEST CASE HAS FAILED ---\n";
+        // Blocking Matrix Multiplication
+        int blockSize =  64; // block size for blocking algorithm
+        auto start_blocking = high_resolution_clock::now();
+        Matrix C_blocking = gemm_blocking(A, B, blockSize);
+        auto stop_blocking = high_resolution_clock::now();
+        auto duration_blocking = duration_cast<milliseconds>(stop_blocking - start_blocking);
+        
+        cout << "Algorithm: GEMM Blocking\nResult matrix:\n";
+        outFile << "Algorithm: GEMM Blocking\nResult matrix:\n";
+        
+        printMatrix(C_blocking, outFile);
+        cout << "Execution time: " << duration_blocking.count() << " ms\n\n";
+
+        outFile.close();
+
+        cout << "--- TEST " << i << " SUMMARY ---\n";
+        if (compareFiles(outFilePath, expectedFilePath)) {
+            cout << "Status: PASSED\n";
+        } else {
+            cout << "Status: FAILED\n";
+        }
+        cout << "Simple GEMM Time  : " << duration_simple.count() << " ms\n";
+        cout << "Blocking GEMM Time: " << duration_blocking.count() << " ms\n";
+        cout << "=================================================\n\n";
     }
 
     return 0;
