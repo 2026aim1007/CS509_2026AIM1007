@@ -1,9 +1,10 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11
-
-TARGET = gemm_driver
-
-SRCS = driver/driver.cpp src/gemm_simple.cpp src/gemm_blocking.cpp
+CXXFLAGS = -Wall -Wextra -std=c++11 -O3
+TARGET = driver_app.exe
+SRCS = driver/driver.cpp \
+       src/gemm_simple.cpp \
+       src/gemm_blocking.cpp \
+       ../utility/testing_utils.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
@@ -16,4 +17,4 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET) gemm_driver.exe
+	rm -f $(OBJS) $(TARGET)
