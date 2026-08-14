@@ -503,5 +503,5 @@ Distance matrix:
 Negative cycle: none
 
 ===METRICS===
-Execution time: 204.291 ms
+Execution time: 352.173 ms
 (Averaged over 5 runs)
