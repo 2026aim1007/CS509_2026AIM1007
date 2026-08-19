@@ -1,0 +1,13 @@
+Algorithm: Kruskal's MST
+(Edges hidden for large graph)
+Total MST weight: 9935673
+
+Algorithm: Prim's MST
+(Edges hidden for large graph)
+Total MST weight: 9935673
+
+===METRICS===
+Kruskal Execution time: 15.1394 ms
+Prim Execution time: 22.639 ms
+(Averaged over 5 runs)
+Status: MATCH

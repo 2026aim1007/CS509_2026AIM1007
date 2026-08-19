@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++11 -O3
+CXXFLAGS = -Wall -Wextra -std=c++14 -O3
 TARGET = driver_app.exe
 SRCS = driver/driver.cpp \
        src/gemm_simple.cpp \

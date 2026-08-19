@@ -1,0 +1,6 @@
+Algorithm: Kruskal's MST
+(Edges hidden for large graph)
+Total MST weight: 19825567
+Algorithm: Prim's MST
+(Edges hidden for large graph)
+Total MST weight: 19825567

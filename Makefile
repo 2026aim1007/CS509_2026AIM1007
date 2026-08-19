@@ -18,7 +18,7 @@ wrapper:
 	@echo "======================================="
 	@echo " Building Common Wrapper..."
 	@echo "======================================="
-	g++ common_wrapper/wrapper.cpp -o common_wrapper/wrapper.exe -std=c++11 -O3
+	g++ common_wrapper/wrapper.cpp -o common_wrapper/wrapper.exe -std=c++14 -O3
 
 clean:
 	@echo "Cleaning Assignment 01..."
