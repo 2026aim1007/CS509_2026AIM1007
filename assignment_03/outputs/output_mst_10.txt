@@ -25,7 +25,7 @@ MST edges:
 Total MST weight: 838
 
 ===METRICS===
-Kruskal Execution time: 0.00558 ms
-Prim Execution time: 0.00458 ms
+Kruskal Execution time: 0.00636 ms
+Prim Execution time: 0.00444 ms
 (Averaged over 5 runs)
 Status: MATCH

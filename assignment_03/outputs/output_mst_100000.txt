@@ -7,7 +7,7 @@ Algorithm: Prim's MST
 Total MST weight: 19825567
 
 ===METRICS===
-Kruskal Execution time: 37.4028 ms
-Prim Execution time: 89.6897 ms
+Kruskal Execution time: 26.3794 ms
+Prim Execution time: 53.6357 ms
 (Averaged over 5 runs)
 Status: MATCH
